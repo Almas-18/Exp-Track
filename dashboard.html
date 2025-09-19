@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Expense Dashboard</h1>
+        <div>
+            <button id="add-expense">Add New Expense</button>
+            <button id="view-all">View All Expenses</button>
+            <button id="logout">Logout</button>
+        </div>
+    </header>
+
+    <main>
+        <!-- Dashboard Cards -->
+        <div class="cards">
+            <div class="card">
+                <h2 id="first-date">-</h2>
+                <p>First Expense Date</p>
+            </div>
+            <div class="card">
+                <h2 id="last-date">-</h2>
+                <p>Last Expense Date</p>
+            </div>
+            <div class="card">
+                <h2 id="num-expenses">0</h2>
+                <p>Number of Expenses</p>
+            </div>
+            <div class="card">
+                <h2 id="total-amount">₹0</h2>
+                <p>Total Amount</p>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts">
+            <div class="chart-container">
+                <h3>Category Summary</h3>
+                <canvas id="categoryChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <h3>Monthly Summary</h3>
+                <canvas id="monthlyChart"></canvas>
+            </div>
+        </div>
+    </main>
+
+    <script src="dashboard.js"></script>
+    <script>
+        // Redirect to login if not logged in
+        if(!localStorage.getItem('loggedInUser')){
+            window.location.href = 'login.html';
+        }
+
+        // Buttons navigation
+        document.getElementById('add-expense').addEventListener('click', () => {
+            window.location.href = 'add_expense.html';
+        });
+
+        document.getElementById('view-all').addEventListener('click', () => {
+            window.location.href = 'all_expenses.html';
+        });
+document.getElementById('logout').addEventListener('click', () => {
+        localStorage.removeItem('loggedInUser'); // remove session
+        window.location.href = 'login.html';     // redirect to login page
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signup / Login</title>
+<style>
+body { font-family: Arial, sans-serif; background: #f5f7fa; display: flex; justify-content: center; align-items: center; height: 100vh; }
+.container { background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); width: 350px; }
+h2 { text-align: center; color: #1e88e5; margin-bottom: 20px; }
+form { display: flex; flex-direction: column; }
+input { margin: 10px 0; padding: 12px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px; }
+button { padding: 12px; border-radius: 5px; border: none; background: #1e88e5; color: white; font-weight: 600; cursor: pointer; transition: 0.3s; }
+button:hover { background: #1565c0; transform: translateY(-2px); }
+.toggle { text-align: center; margin-top: 10px; color: #555; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2 id="form-title">Sign Up</h2>
+    <form id="auth-form">
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="submit" id="submit-btn">Sign Up</button>
+    </form>
+    <div class="toggle" id="toggle-form">Already have an account? Login</div>
+</div>
+
+<script>
+let isLogin = false; // default to signup
+
+const formTitle = document.getElementById('form-title');
+const authForm = document.getElementById('auth-form');
+const toggleForm = document.getElementById('toggle-form');
+const submitBtn = document.getElementById('submit-btn');
+
+// Toggle login/signup
+toggleForm.addEventListener('click', () => {
+    isLogin = !isLogin;
+    if(isLogin){
+        formTitle.textContent = 'Login';
+        submitBtn.textContent = 'Login';
+        toggleForm.textContent = "Don't have an account? Sign up";
+    } else {
+        formTitle.textContent = 'Sign Up';
+        submitBtn.textContent = 'Sign Up';
+        toggleForm.textContent = "Already have an account? Login";
+    }
+});
+
+// Form submission
+authForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
+
+    if(!username || !password) return alert("Please fill all fields");
+
+    let users = JSON.parse(localStorage.getItem('users') || '[]');
+
+    if(isLogin){
+        const user = users.find(u => u.username === username && u.password === password);
+        if(user){
+            localStorage.setItem('loggedInUser', username);
+            alert('Login Successful!');
+            window.location.href = 'dashboard.html';
+        } else {
+            alert('Invalid username or password');
+        }
+    } else {
+        if(users.find(u => u.username === username)){
+            return alert('Username already exists!');
+        }
+        users.push({username, password});
+        localStorage.setItem('users', JSON.stringify(users));
+        alert('Signup successful! You can login now.');
+        isLogin = true;
+        formTitle.textContent = 'Login';
+        submitBtn.textContent = 'Login';
+        toggleForm.textContent = "Don't have an account? Sign up";
+        authForm.reset();
+    }
+});
+</script>
+
+</body>
+</html>
